@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-	id("org.springframework.boot") version "3.3.0"
+	id("org.springframework.boot") version "3.2.6"
 	id("io.spring.dependency-management") version "1.1.5"
 	kotlin("jvm") version "1.9.24"
 	kotlin("plugin.spring") version "1.9.24"
@@ -24,22 +24,30 @@ java {
 repositories {
 	mavenCentral()
 }
+private val jwtVersion = "0.11.5"
+private val swaggerVersion = "2.5.0"
 
 dependencies {
+	// web
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-web")
-
+	// swagger
+	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:$swaggerVersion")
+	//security
 	implementation("org.springframework.boot:spring-boot-starter-security")
-	implementation("io.jsonwebtoken:jjwt-api:0.11.5")
-	runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
-	runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5")
-
+	implementation("io.jsonwebtoken:jjwt-api:$jwtVersion")
+	runtimeOnly("io.jsonwebtoken:jjwt-impl:$jwtVersion")
+	runtimeOnly("io.jsonwebtoken:jjwt-jackson:$jwtVersion")
+	// serialization
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
-
+	// devtool
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
+	// docker
 	developmentOnly("org.springframework.boot:spring-boot-docker-compose")
+	// database
 	runtimeOnly("org.mariadb.jdbc:mariadb-java-client")
+	// test
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }

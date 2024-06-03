@@ -6,17 +6,25 @@ spring:
   config:
     activate:
       on-profile: dev
-  datasource:
-    driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://localhost:33006/todo_list
-    username: todo
-    password: todo
+#  datasource:
+#    driver-class-name: org.mariadb.jdbc.Driver
+#    url: jdbc:mariadb://localhost:33006/todo_list
+#    username: todo
+#    password: todo
   jpa:
     hibernate:
       ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MariaDBDialect
+  docker:
+    compose:
+      enabled: true
+      lifecycle-management: start_and_stop
+      stop:
+        command: down
+
 
 server:
   port: 8080
+
