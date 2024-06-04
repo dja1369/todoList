@@ -21,8 +21,8 @@ class SecurityConfig(
     private val jwtAuthorizationFilter: JWTAuthorizationFilter
 ) {
     private val allowedUrls = arrayOf(
-        "/api/v1/login",
-        "/api/v1/signup",
+        "/api/v1/auth/login",
+        "/api/v1/registers/register",
         "/swagger-ui/**",
         "/v3/**",
     )

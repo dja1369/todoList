@@ -13,11 +13,15 @@ class UserAuthServiceImpl(
     private val passwordEncoder: PasswordEncoder
 ): UserAuthService{
     override fun validateEmail(email: String): Boolean {
-        return true
+        val isExistEmail = userRepository.existsByEmail(email)
+        check(!isExistEmail) { "Email is already in use" }
+        return isExistEmail
     }
 
     override fun validateNickName(nickName: String): Boolean {
-        return true
+        val isExistNickName = userRepository.existsByNickName(nickName)
+        check(!isExistNickName) { "NickName is already in use" }
+        return isExistNickName
     }
 
     override fun validateLogin(email: String, password: String): User {

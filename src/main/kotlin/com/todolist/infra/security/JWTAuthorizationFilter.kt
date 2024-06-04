@@ -21,7 +21,7 @@ class JWTAuthorizationFilter(
             token = it.replace("Bearer", "").trimIndent()
         }
         when(request.requestURI){
-            "/api/v1/login", "/api/v1/signup", "/swagger-ui/**", "/v3/api-docs" -> {
+            "/api/v1/auth/login", "/api/v1/registers/register", "/swagger-ui/**", "/v3/api-docs" -> {
                 filterChain.doFilter(request, response)
                 return
             }
