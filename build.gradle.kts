@@ -40,6 +40,8 @@ dependencies {
 	runtimeOnly("io.jsonwebtoken:jjwt-jackson:$jwtVersion")
 	// serialization
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+
+	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	// devtool
 	developmentOnly("org.springframework.boot:spring-boot-devtools")

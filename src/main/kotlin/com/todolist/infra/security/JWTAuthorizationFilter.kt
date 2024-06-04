@@ -26,6 +26,7 @@ class JWTAuthorizationFilter(
                 return
             }
         }
+        filterChain.doFilter(request, response)
+        return
     }
-
 }

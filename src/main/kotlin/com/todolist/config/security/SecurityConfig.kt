@@ -3,8 +3,8 @@ package com.todolist.config.security
 import com.todolist.infra.security.JWTAuthorizationFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -15,9 +15,11 @@ import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.CorsConfigurationSource
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 
+@EnableMethodSecurity
 @Configuration
-@EnableWebSecurity
-class SecurityConfig {
+class SecurityConfig(
+    private val jwtAuthorizationFilter: JWTAuthorizationFilter
+) {
     private val allowedUrls = arrayOf(
         "/api/v1/login",
         "/api/v1/signup",
@@ -27,22 +29,18 @@ class SecurityConfig {
 
     @Bean
     fun filterChain(
-        http: HttpSecurity,
-        jwtAuthorizationFilter: JWTAuthorizationFilter
+        http: HttpSecurity
     ): DefaultSecurityFilterChain = http
-        .httpBasic{ it.disable() }
         .csrf { it.disable() }
-        .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
         .authorizeHttpRequests {
             it.requestMatchers(
                 *allowedUrls.map { allowedUrl -> AntPathRequestMatcher(allowedUrl) }.toTypedArray()
-            ).permitAll()
-            it.anyRequest().authenticated()
+            ).permitAll().anyRequest().authenticated()
         }
-        .cors {
-            corsConfigurationSource()
-        }
+        .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
+        .cors { corsConfigurationSource() }
         .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter::class.java)
+        .httpBasic { it.disable() }
         .build()
 
     @Bean
@@ -72,7 +70,6 @@ class SecurityConfig {
     }
 
     @Bean
-    fun passwordEncoder(): PasswordEncoder {
-        return BCryptPasswordEncoder()
-    }
+    fun passwordEncoder(): PasswordEncoder = BCryptPasswordEncoder()
 }
+
