@@ -1,16 +1,18 @@
 spring:
   profiles:
     active: dev
+
+server:
+  port: 8080
+
+logging:
+  level:
+    root: info
 ---
 spring:
   config:
     activate:
       on-profile: dev
-#  datasource:
-#    driver-class-name: org.mariadb.jdbc.Driver
-#    url: jdbc:mariadb://localhost:33006/todo_list
-#    username: todo
-#    password: todo
   jpa:
     hibernate:
       ddl-auto: update
@@ -25,6 +27,4 @@ spring:
         command: down
 
 
-server:
-  port: 8080
 
