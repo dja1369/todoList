@@ -47,7 +47,7 @@ dependencies {
 	// devtool
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	// docker
-	developmentOnly("org.springframework.boot:spring-boot-docker-compose")
+	testAndDevelopmentOnly("org.springframework.boot:spring-boot-docker-compose")
 	// database
 	runtimeOnly("org.mariadb.jdbc:mariadb-java-client")
 	// test
