@@ -1,6 +1,5 @@
 package com.todolist.unittest.user
 
-import com.todolist.aplication.user.repository.UserRepository
 import com.todolist.domain.user.entity.User
 import com.todolist.domain.user.module.UserAuthService
 import org.assertj.core.api.Assertions.assertThat

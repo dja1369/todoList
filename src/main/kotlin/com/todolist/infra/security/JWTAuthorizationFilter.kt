@@ -16,18 +16,19 @@ class JWTAuthorizationFilter(
         response: HttpServletResponse,
         filterChain: FilterChain,
     ) {
-        var token: String?
-        request.getHeader("Authorization").apply {
-            token = this.replace("Bearer", "").trimIndent()
-        } ?: null
+        var token: String = ""
+        val header = request.getHeader("Authorization") ?: null
+        request.getHeader("Authorization")?.let {
+            token = it.replace("bearer", "", ignoreCase = true).trimIndent()
+        }
         when(request.requestURI){
             "/api/v1/auth/login", "/api/v1/registers/register", "/swagger-ui/**", "/v3/api-docs" -> {
                 filterChain.doFilter(request, response)
                 return
             }
             else -> {
-                if (token!!.isNotBlank()){
-                    check(tokenProvider.validateToken(token!!)) {"Invalid Token"}
+                if (token.isNotBlank()){
+                    check(tokenProvider.validateToken(token)) {"Invalid Token"}
                     SecurityContextHolder.getContext().authentication = tokenProvider.authenticateToken(token!!)
                     filterChain.doFilter(request, response)
                     return

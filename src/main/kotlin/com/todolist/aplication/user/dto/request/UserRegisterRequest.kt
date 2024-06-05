@@ -13,3 +13,4 @@ data class UserRegisterRequest (
         require(password.isNotBlank()) { "Password must be a non-blank string" }
     }
 }
+
