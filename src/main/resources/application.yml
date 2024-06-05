@@ -23,10 +23,6 @@ spring:
     compose:
       enabled: true
       lifecycle-management: start_and_stop
-      start:
-        command: up
-      stop:
-        command: down
       skip:
         in-tests: false
 

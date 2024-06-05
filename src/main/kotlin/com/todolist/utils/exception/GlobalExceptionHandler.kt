@@ -1,7 +1,6 @@
-package com.todolist.infra.exception
+package com.todolist.utils.exception
 
 import com.fasterxml.jackson.databind.exc.MismatchedInputException
-import com.fasterxml.jackson.module.kotlin.MissingKotlinParameterException
 import com.todolist.domain.common.CommonResponse
 import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.servlet.http.HttpServletRequest
@@ -9,7 +8,6 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.http.converter.HttpMessageNotReadableException
 import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 
@@ -24,14 +22,16 @@ class GlobalExceptionHandler {
                 val missingParameter = cause.path.joinToString(separator = ".") { it.fieldName }
                 "Missing parameter: $missingParameter"
             }
-            is IllegalArgumentException -> {
-                // todo : add more specific error message
-                val missingParameter = cause.message
+            else -> when(val nestCause = cause?.cause){
+                is IllegalArgumentException -> {
+                    val missingParameter = nestCause.message
+                    "Validation Error: $missingParameter"
+                }
+                else -> "Invalid Error"
             }
-            else -> "Invalid request"
         }
         val errorDetail = CommonResponse(
-            message = "Missing parameter",
+            message = "Parameter Error",
             result = error
         )
         return ResponseEntity(errorDetail, HttpStatus.BAD_REQUEST)
