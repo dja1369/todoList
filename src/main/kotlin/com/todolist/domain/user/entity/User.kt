@@ -1,4 +1,4 @@
-package com.todolist.domain.user
+package com.todolist.domain.user.entity
 
 import com.todolist.domain.common.BaseEntity
 import jakarta.persistence.*

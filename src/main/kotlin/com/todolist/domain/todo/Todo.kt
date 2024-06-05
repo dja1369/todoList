@@ -2,7 +2,7 @@ package com.todolist.domain.todo
 
 import com.todolist.domain.common.BaseEntity
 import com.todolist.domain.todo.enums.Status
-import com.todolist.domain.user.User
+import com.todolist.domain.user.entity.User
 import jakarta.persistence.*
 import java.util.UUID
 
