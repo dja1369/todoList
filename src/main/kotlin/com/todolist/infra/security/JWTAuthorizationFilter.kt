@@ -3,6 +3,7 @@ package com.todolist.infra.security
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 
@@ -16,14 +17,21 @@ class JWTAuthorizationFilter(
         filterChain: FilterChain,
     ) {
         var token: String?
-        val authorizationHeader = request.getHeader("Authorization") ?: null
-        authorizationHeader?.let{
-            token = it.replace("Bearer", "").trimIndent()
-        }
+        request.getHeader("Authorization").apply {
+            token = this.replace("Bearer", "").trimIndent()
+        } ?: null
         when(request.requestURI){
             "/api/v1/auth/login", "/api/v1/registers/register", "/swagger-ui/**", "/v3/api-docs" -> {
                 filterChain.doFilter(request, response)
                 return
+            }
+            else -> {
+                if (token!!.isNotBlank()){
+                    check(tokenProvider.validateToken(token!!)) {"Invalid Token"}
+                    SecurityContextHolder.getContext().authentication = tokenProvider.authenticateToken(token!!)
+                    filterChain.doFilter(request, response)
+                    return
+                }
             }
         }
         filterChain.doFilter(request, response)
