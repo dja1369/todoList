@@ -7,6 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 
+
 @Component
 class JWTAuthorizationFilter(
     private val tokenProvider: TokenProvider
@@ -16,8 +17,7 @@ class JWTAuthorizationFilter(
         response: HttpServletResponse,
         filterChain: FilterChain,
     ) {
-        var token: String = ""
-        val header = request.getHeader("Authorization") ?: null
+        var token = ""
         request.getHeader("Authorization")?.let {
             token = it.replace("bearer", "", ignoreCase = true).trimIndent()
         }
@@ -29,9 +29,7 @@ class JWTAuthorizationFilter(
             else -> {
                 if (token.isNotBlank()){
                     check(tokenProvider.validateToken(token)) {"Invalid Token"}
-                    SecurityContextHolder.getContext().authentication = tokenProvider.authenticateToken(token!!)
-                    filterChain.doFilter(request, response)
-                    return
+                    SecurityContextHolder.getContext().authentication = tokenProvider.authenticateToken(token)
                 }
             }
         }

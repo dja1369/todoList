@@ -11,7 +11,6 @@ import com.todolist.domain.todo.vo.TodoVoList
 import com.todolist.utils.ConverterUtil
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.data.repository.findByIdOrNull
-import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Component
 import java.time.LocalDateTime
 import java.util.*
@@ -37,18 +36,12 @@ class TodoServiceImpl(
     override fun updateTodo(id: String, content: String, newStatus: Status): TodoVoDetail {
         val todo = todoRepository.findByUuidId(UUID.fromString(id)) ?: throw Exception("Todo Not Found")
         todo.content = content
-        when (todo.status){
-            Status.IN_PROGRESS -> {
-                check(newStatus == Status.PENDING) { "PENDING은 오직 IN_PROGRESS 상태에서만 변경 가능합니다." }
-                todo.status = newStatus
-            }
+        when (newStatus){
             Status.PENDING -> {
+                check(todo.status == Status.IN_PROGRESS) { "PENDING은 오직 IN_PROGRESS 상태에서만 변경 가능합니다." }
                 todo.status = newStatus
             }
-            else -> {
-                check(newStatus != Status.PENDING) { "PENDING은 오직 IN_PROGRESS 상태에서만 변경 가능합니다." }
-                todo.status = newStatus
-            }
+            else -> todo.status = newStatus
         }
         todoRepository.save(todo)
         return todo.toVoDetail()
