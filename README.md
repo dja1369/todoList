@@ -24,7 +24,7 @@ Test: ./gradlew clean test
 Run: ./gradlew clean bootRun
     - 컴포즈 파일을 읽어 자동으로 데이터 베이스가 구축됩니다.
 
-WebTest: http://localhost:8080/swagger-ui.html
+WebTest: http://localhost:8080/swagger-ui/index.html
     - Swagger를 통해 API를 테스트할 수 있습니다.
 ```
 
