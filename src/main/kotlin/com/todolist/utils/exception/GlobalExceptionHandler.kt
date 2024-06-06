@@ -1,5 +1,6 @@
 package com.todolist.utils.exception
 
+import com.fasterxml.jackson.databind.exc.InvalidFormatException
 import com.fasterxml.jackson.databind.exc.MismatchedInputException
 import com.todolist.domain.common.CommonResponse
 import io.github.oshai.kotlinlogging.KotlinLogging
@@ -18,6 +19,10 @@ class GlobalExceptionHandler {
     @ExceptionHandler(HttpMessageNotReadableException::class)
     fun handleHttpMessageNotReadableException(e: HttpMessageNotReadableException): ResponseEntity<CommonResponse> {
         val error = when (val cause = e.cause) {
+            is InvalidFormatException -> {
+                val enumValues = cause.targetType.enumConstants.joinToString(separator = ", ") { it.toString() }
+                "Not Match Enum class: [$enumValues]"
+            }
             is MismatchedInputException -> {
                 val missingParameter = cause.path.joinToString(separator = ".") { it.fieldName }
                 "Missing parameter: $missingParameter"
