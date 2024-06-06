@@ -10,6 +10,7 @@ import org.mockito.Mockito.`when`
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.crypto.password.PasswordEncoder
 
 import java.time.LocalDateTime
@@ -29,7 +30,7 @@ class UserAuthServiceTest {
     fun `로그인 성공 테스트`(){
         // given
         val user = User(email = email, password = password, nickName = nickName)
-        `when`(userRepository.findByEmail(email)).thenReturn(user)
+        `when`(userRepository.findByEmailAndDeletedAtIsNull(email)).thenReturn(user)
         `when`(passwordEncoder.matches(password, user.password)).thenReturn(true)
 
         // when
@@ -43,21 +44,21 @@ class UserAuthServiceTest {
         // given
         val user = User(email = email, password = password, nickName = nickName)
         user.deletedAt = LocalDateTime.now()
-        `when`(userRepository.findByEmail(email)).thenReturn(user)
+        `when`(userRepository.findByEmailAndDeletedAtIsNull(email)).thenReturn(null)
         `when`(passwordEncoder.matches(password, user.password)).thenReturn(true)
 
         // when && then
         assertThatThrownBy {
             userAuthService.validateLogin(email, password)
-        }.isInstanceOf(IllegalArgumentException::class.java)
-            .hasMessage("Deleted User")
+        }.isInstanceOf(UsernameNotFoundException::class.java)
+            .hasMessage("User Not Found")
     }
 
     @Test
     fun `비밀번호가 맞지 않는 로그인 실패 테스트`(){
         // given
         val user = User(email = email, password = wrongPassword, nickName = nickName)
-        `when`(userRepository.findByEmail(email)).thenReturn(user)
+        `when`(userRepository.findByEmailAndDeletedAtIsNull(email)).thenReturn(user)
         `when`(passwordEncoder.matches(password, user.password)).thenReturn(false)
 
         // when && then
@@ -70,7 +71,7 @@ class UserAuthServiceTest {
     @Test
     fun `이메일 중복이 아닐경우 테스트`(){
         // given
-        `when`(userRepository.existsByEmail(email)).thenReturn(false)
+        `when`(userRepository.existsByEmailAndDeletedAtIsNull(email)).thenReturn(false)
 
         // when
         val result = userAuthService.validateEmail(email)
@@ -82,7 +83,7 @@ class UserAuthServiceTest {
     @Test
     fun `이메일 중복일 경우 테스트`() {
         // given
-        `when`(userRepository.existsByEmail(email)).thenReturn(true)
+        `when`(userRepository.existsByEmailAndDeletedAtIsNull(email)).thenReturn(true)
 
         // when && then
         assertThatThrownBy {
@@ -94,7 +95,7 @@ class UserAuthServiceTest {
     @Test
     fun `닉네임 중복이 아닐경우 테스트`(){
         // given
-        `when`(userRepository.existsByNickName(nickName)).thenReturn(false)
+        `when`(userRepository.existsByNickNameAndDeletedAtIsNull(nickName)).thenReturn(false)
 
         // when
         val result = userAuthService.validateNickName(nickName)
@@ -106,7 +107,7 @@ class UserAuthServiceTest {
     @Test
     fun `닉네임 중복일 경우 테스트`() {
         // given
-        `when`(userRepository.existsByNickName(nickName)).thenReturn(true)
+        `when`(userRepository.existsByNickNameAndDeletedAtIsNull(nickName)).thenReturn(true)
 
         // when && then
         assertThatThrownBy {

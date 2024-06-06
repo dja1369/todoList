@@ -10,7 +10,7 @@ class User(
     @Column(name = "nick_name", unique = true, nullable = false, length = 100)
     val nickName: String,
 
-    @Column(name = "email", unique = true, nullable = false)
+    @Column(name = "email", nullable = false)
     val email: String,
 
     @Column(name = "password", nullable = false)

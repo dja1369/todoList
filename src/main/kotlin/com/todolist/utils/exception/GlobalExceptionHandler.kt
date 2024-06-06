@@ -36,8 +36,8 @@ class GlobalExceptionHandler {
             }
         }
         val errorDetail = CommonResponse(
-            message = "Parameter Error",
-            result = error
+            message = error,
+            result = emptyArray<Any>()
         )
         return ResponseEntity(errorDetail, HttpStatus.BAD_REQUEST)
     }

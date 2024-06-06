@@ -31,7 +31,7 @@ class UserRegisterServiceImpl(
 
     override fun withdrawalUser(email: String, password: String): Boolean {
         logger.info { "Search Withdrawal Target User Entity" }
-        val withdrawalUser: User = userRepository.findByEmail(email) ?: throw UsernameNotFoundException("User Not Found")
+        val withdrawalUser: User = userRepository.findByEmailAndDeletedAtIsNull(email) ?: throw UsernameNotFoundException("User Not Found")
 
         logger.info { "Deleted DateTime Update Delete User Entity" }
         withdrawalUser.deletedAt = LocalDateTime.now()

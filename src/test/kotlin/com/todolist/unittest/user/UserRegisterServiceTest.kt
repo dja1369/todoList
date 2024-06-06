@@ -51,7 +51,7 @@ class UserRegisterServiceTest {
     @Test
     fun `이메일이 중복된 회원가입 실패 테스트`() {
         // given
-        `when`(userRepository.existsByEmail(email)).thenReturn(true)
+        `when`(userRepository.existsByEmailAndDeletedAtIsNull(email)).thenReturn(true)
 
         // when && then
         assertThatThrownBy {
@@ -63,7 +63,7 @@ class UserRegisterServiceTest {
     @Test
     fun `닉네임이 중복된 회원가입 실패 테스트`() {
         // given
-        `when`(userRepository.existsByNickName(nickName)).thenReturn(true)
+        `when`(userRepository.existsByNickNameAndDeletedAtIsNull(nickName)).thenReturn(true)
 
         // when && then
         assertThatThrownBy {
@@ -77,7 +77,7 @@ class UserRegisterServiceTest {
         // given
         val user = User(email = email, password = password, nickName = nickName)
 
-        `when`(userRepository.findByEmail(email)).thenReturn(user)
+        `when`(userRepository.findByEmailAndDeletedAtIsNull(email)).thenReturn(user)
         `when`(userRepository.save(any(User::class.java))).thenAnswer { it.getArgument(0) }
 
         // when
@@ -91,7 +91,7 @@ class UserRegisterServiceTest {
     @Test
     fun `이메일이 맞지 않는 회원탈퇴 실패 테스트`() {
         // given
-        `when`(userRepository.findByEmail(email)).thenReturn(null)
+        `when`(userRepository.findByEmailAndDeletedAtIsNull(email)).thenReturn(null)
 
         // when && then
         assertThatThrownBy {
@@ -104,7 +104,7 @@ class UserRegisterServiceTest {
     fun `비밀번호가 맞지 않는 회원탈퇴 실패 테스트`() {
         // given
         val user = User(email = email, password = wrongPassword, nickName = nickName)
-        `when`(userRepository.findByEmail(email)).thenReturn(user)
+        `when`(userRepository.findByEmailAndDeletedAtIsNull(email)).thenReturn(user)
         `when`(passwordEncoder.matches(password, user.password)).thenReturn(false)
 
         // when && then

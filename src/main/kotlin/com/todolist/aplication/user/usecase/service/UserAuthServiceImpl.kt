@@ -17,7 +17,7 @@ class UserAuthServiceImpl(
 ): UserAuthService{
     override fun validateEmail(email: String): Boolean {
         logger.info { "Check Is Exist Email Check" }
-        val isExistEmail = userRepository.existsByEmail(email)
+        val isExistEmail = userRepository.existsByEmailAndDeletedAtIsNull(email)
         check(!isExistEmail) { "Email is already in use" }
         logger.info { "Unused Email Then Confirmed" }
         return isExistEmail
@@ -25,7 +25,7 @@ class UserAuthServiceImpl(
 
     override fun validateNickName(nickName: String): Boolean {
         logger.info { "Check Is Exist NickName Check" }
-        val isExistNickName = userRepository.existsByNickName(nickName)
+        val isExistNickName = userRepository.existsByNickNameAndDeletedAtIsNull(nickName)
         check(!isExistNickName) { "NickName is already in use" }
         logger.info { "Unused NickName Then Confirmed" }
         return isExistNickName
@@ -33,15 +33,12 @@ class UserAuthServiceImpl(
 
     override fun validateLogin(email: String, password: String): User {
         logger.info { "Check Is Exist User Check" }
-        val user: User = userRepository.findByEmail(email) ?: throw UsernameNotFoundException("User Not Found")
+        val user: User = userRepository.findByEmailAndDeletedAtIsNull(email) ?: throw UsernameNotFoundException("User Not Found")
         logger.info { "Exist User Then Confirmed" }
         logger.info { "Check Password Match && Check If Not Withdrawal User" }
         when {
             !passwordEncoder.matches(password, user.password) -> {
                 throw IllegalArgumentException("Password Not Match")
-            }
-            user.deletedAt != null -> {
-                throw IllegalArgumentException("Deleted User")
             }
         }
         logger.info { "User Login Confirmed" }
