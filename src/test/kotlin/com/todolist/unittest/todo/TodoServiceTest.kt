@@ -15,16 +15,11 @@ import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.ArgumentMatchers.any
-import org.mockito.ArgumentMatchers.anyString
-import org.mockito.Mock
-import org.mockito.Mockito
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
-import org.springframework.data.repository.findByIdOrNull
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContext
 import org.springframework.security.core.context.SecurityContextHolder
@@ -72,8 +67,8 @@ class TodoServiceTest {
         val user = User("test@test.com", "test", "password")
         val todo = Todo(title = title, content = content, user = user)
 
-        `when`(userRepository.findByIdOrNull(any(UUID::class.java))).thenReturn(user)
-        `when`(todoRepository.save(any(Todo::class.java))).thenReturn(todo)
+        `when`(userRepository.findById(userId)).thenReturn(Optional.of(user))
+        `when`(todoRepository.save(todo)).thenReturn(todo)
 
         // when
         val result = todoService.createTodo(title, content)
@@ -128,7 +123,7 @@ class TodoServiceTest {
         )
 
         `when`(todoRepository.findByUuidId(uuidId)).thenReturn(mockTodo)
-        `when`(todoRepository.save(any(Todo::class.java))).thenReturn(mockTodo)
+        `when`(todoRepository.save(mockTodo)).thenReturn(mockTodo)
 
         // when
         val result = todoService.updateTodo(

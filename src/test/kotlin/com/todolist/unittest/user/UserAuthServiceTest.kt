@@ -20,12 +20,15 @@ class UserAuthServiceTest {
     @MockBean private lateinit var passwordEncoder: PasswordEncoder
     @Autowired private lateinit var userAuthService: UserAuthService
 
+    private val email = "test@test.com"
+    private val nickName = "test"
+    private val password = "password"
+    private val wrongPassword = "wrongPassword"
+
     @Test
     fun `로그인 성공 테스트`(){
         // given
-        val email = "test@test.com"
-        val password = "password"
-        val user = User(email = email, password = password, nickName = "test")
+        val user = User(email = email, password = password, nickName = nickName)
         `when`(userRepository.findByEmail(email)).thenReturn(user)
         `when`(passwordEncoder.matches(password, user.password)).thenReturn(true)
 
@@ -38,9 +41,7 @@ class UserAuthServiceTest {
     @Test
     fun `탈퇴한 유저 로그인 실패 테스트`(){
         // given
-        val email = "test@test.com"
-        val password = "password"
-        val user = User(email = email, password = password, nickName = "test")
+        val user = User(email = email, password = password, nickName = nickName)
         user.deletedAt = LocalDateTime.now()
         `when`(userRepository.findByEmail(email)).thenReturn(user)
         `when`(passwordEncoder.matches(password, user.password)).thenReturn(true)
@@ -55,9 +56,7 @@ class UserAuthServiceTest {
     @Test
     fun `비밀번호가 맞지 않는 로그인 실패 테스트`(){
         // given
-        val email = "test@test.com"
-        val password = "password"
-        val user = User(email = email, password = "wrongPassword", nickName = "test")
+        val user = User(email = email, password = wrongPassword, nickName = nickName)
         `when`(userRepository.findByEmail(email)).thenReturn(user)
         `when`(passwordEncoder.matches(password, user.password)).thenReturn(false)
 
@@ -71,7 +70,6 @@ class UserAuthServiceTest {
     @Test
     fun `이메일 중복이 아닐경우 테스트`(){
         // given
-        val email = "test@test.com"
         `when`(userRepository.existsByEmail(email)).thenReturn(false)
 
         // when
@@ -84,7 +82,6 @@ class UserAuthServiceTest {
     @Test
     fun `이메일 중복일 경우 테스트`() {
         // given
-        val email = "test@test.com"
         `when`(userRepository.existsByEmail(email)).thenReturn(true)
 
         // when && then
@@ -97,7 +94,6 @@ class UserAuthServiceTest {
     @Test
     fun `닉네임 중복이 아닐경우 테스트`(){
         // given
-        val nickName = "test"
         `when`(userRepository.existsByNickName(nickName)).thenReturn(false)
 
         // when
@@ -110,7 +106,6 @@ class UserAuthServiceTest {
     @Test
     fun `닉네임 중복일 경우 테스트`() {
         // given
-        val nickName = "test"
         `when`(userRepository.existsByNickName(nickName)).thenReturn(true)
 
         // when && then

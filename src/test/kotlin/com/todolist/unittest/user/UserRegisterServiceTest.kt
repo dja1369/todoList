@@ -1,6 +1,9 @@
 package com.todolist.unittest.user
 
 import com.todolist.aplication.commonRepository.UserRepository
+import com.todolist.aplication.user.dto.request.UserLoginRequest
+import com.todolist.aplication.user.dto.request.UserRegisterRequest
+import com.todolist.aplication.user.usecase.UserApplication
 import com.todolist.domain.user.entity.User
 import com.todolist.domain.user.module.UserRegisterService
 import org.assertj.core.api.Assertions.assertThat
@@ -25,13 +28,17 @@ class UserRegisterServiceTest {
     @Autowired
     private lateinit var userRegisterService: UserRegisterService
 
+    @Autowired
+    private lateinit var userApplication: UserApplication
+    private val email = "test@test.com"
+    private val nickName = "test"
+    private val password = "password"
+    private val encodedPassword = "encodedPassword"
+    private val wrongPassword = "wrongPassword"
+
     @Test
     fun `회원가입 성공 테스트`() {
         // given
-        val email = "test@test.com"
-        val nickName = "test"
-        val password = "password"
-        val encodedPassword = "encodedPassword"
         `when`(passwordEncoder.encode(password)).thenReturn(encodedPassword)
 
         // when
@@ -44,41 +51,30 @@ class UserRegisterServiceTest {
     @Test
     fun `이메일이 중복된 회원가입 실패 테스트`() {
         // given
-        val email = "test@test.com"
-        val nickName = "test"
-        val password = "password"
-        val user = User(email = email, password = password, nickName = nickName)
         `when`(userRepository.existsByEmail(email)).thenReturn(true)
 
         // when && then
         assertThatThrownBy {
-            userRegisterService.registerUser(email, nickName, password)
-        }.isInstanceOf(IllegalArgumentException::class.java)
+            userApplication.isRegister(UserRegisterRequest(email = email, nickName = nickName, password =  password))
+        }.isInstanceOf(IllegalStateException::class.java)
             .hasMessage("Email is already in use")
     }
 
     @Test
     fun `닉네임이 중복된 회원가입 실패 테스트`() {
         // given
-        val email = "test@test.com"
-        val nickName = "test"
-        val password = "password"
-        val user = User(email = email, password = password, nickName = nickName)
         `when`(userRepository.existsByNickName(nickName)).thenReturn(true)
 
         // when && then
         assertThatThrownBy {
-            userRegisterService.registerUser(email, nickName, password)
-        }.isInstanceOf(IllegalArgumentException::class.java)
+            userApplication.isRegister(UserRegisterRequest(email = email, nickName = nickName, password =  password))
+        }.isInstanceOf(IllegalStateException::class.java)
             .hasMessage("NickName is already in use")
     }
 
     @Test
     fun `회원탈퇴 성공 테스트`() {
         // given
-        val email = "test@test.com"
-        val nickName = "test"
-        val password = "password"
         val user = User(email = email, password = password, nickName = nickName)
 
         `when`(userRepository.findByEmail(email)).thenReturn(user)
@@ -95,8 +91,6 @@ class UserRegisterServiceTest {
     @Test
     fun `이메일이 맞지 않는 회원탈퇴 실패 테스트`() {
         // given
-        val email = "test@test.com"
-        val password = "password"
         `when`(userRepository.findByEmail(email)).thenReturn(null)
 
         // when && then
@@ -109,17 +103,13 @@ class UserRegisterServiceTest {
     @Test
     fun `비밀번호가 맞지 않는 회원탈퇴 실패 테스트`() {
         // given
-        val email = "test@test.com"
-        val password = "password"
-        val wrongPassword = "wrongPassword"
-        val nickName = "test"
         val user = User(email = email, password = wrongPassword, nickName = nickName)
         `when`(userRepository.findByEmail(email)).thenReturn(user)
         `when`(passwordEncoder.matches(password, user.password)).thenReturn(false)
 
         // when && then
         assertThatThrownBy {
-            userRegisterService.withdrawalUser(email, password)
+            userApplication.isWithdrawal(request = UserLoginRequest(email = email, password = password))
         }.isInstanceOf(IllegalArgumentException::class.java)
             .hasMessage("Password Not Match")
     }
