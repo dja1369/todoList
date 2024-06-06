@@ -1,6 +1,6 @@
 package com.todolist.aplication.user.usecase.service
 
-import com.todolist.aplication.user.repository.UserRepository
+import com.todolist.aplication.commonRepository.UserRepository
 import com.todolist.domain.user.entity.User
 import com.todolist.domain.user.module.UserRegisterService
 import org.springframework.security.core.userdetails.UsernameNotFoundException

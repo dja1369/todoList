@@ -3,6 +3,7 @@ package com.todolist.config.swagger
 import io.swagger.v3.oas.models.Components
 import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.info.Info
+import io.swagger.v3.oas.models.security.SecurityRequirement
 
 import io.swagger.v3.oas.models.security.SecurityScheme
 import org.springframework.context.annotation.Bean
@@ -19,6 +20,7 @@ class SwaggerConfig {
                 .addSecuritySchemes(SECURITY_SCHEME_NAME, securityScheme())
         )
         .info(apiInfo())
+        .addSecurityItem(SecurityRequirement().addList(SECURITY_SCHEME_NAME))
 
     private fun apiInfo(): Info = Info()
         .title("TODO REST APIDocs")
@@ -28,6 +30,7 @@ class SwaggerConfig {
     private fun securityScheme(): SecurityScheme {
         return SecurityScheme()
             .type(SecurityScheme.Type.HTTP)
+            .name(SECURITY_SCHEME_NAME)
             .scheme("bearer")
             .bearerFormat("JWT")
     }

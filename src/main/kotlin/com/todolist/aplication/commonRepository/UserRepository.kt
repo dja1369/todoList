@@ -1,4 +1,4 @@
-package com.todolist.aplication.user.repository
+package com.todolist.aplication.commonRepository
 
 import com.todolist.domain.user.entity.User
 import org.springframework.data.jpa.repository.JpaRepository

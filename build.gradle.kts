@@ -35,6 +35,7 @@ dependencies {
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:$swaggerVersion")
 	//security
 	implementation("org.springframework.boot:spring-boot-starter-security")
+	// jwt
 	implementation("io.jsonwebtoken:jjwt-api:$jwtVersion")
 	runtimeOnly("io.jsonwebtoken:jjwt-impl:$jwtVersion")
 	runtimeOnly("io.jsonwebtoken:jjwt-jackson:$jwtVersion")
