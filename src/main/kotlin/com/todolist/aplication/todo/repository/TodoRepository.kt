@@ -6,7 +6,7 @@ import java.util.UUID
 
 interface TodoRepository: JpaRepository<Todo, Long>{
     fun findAllByUserId(userId: UUID): List<Todo>?
-    fun findByUuidId(id: UUID): Todo?
+    fun findByUuidIdAndDeletedAtIsNull(id: UUID): Todo?
     fun findByUserIdAndDeletedAtIsNullOrderByUpdatedAtDesc(userId: UUID): Todo?
     fun findByUserIdAndDeletedAtIsNullOrderByCreatedAtDesc(userId: UUID): Todo?
 }

@@ -14,7 +14,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
 import org.springframework.beans.factory.annotation.Autowired
@@ -87,7 +86,7 @@ class TodoServiceTest {
             content = "This is a test todo",
             user = User(email = "test@test.com", nickName = "test", password = "password")
         )
-        `when`(todoRepository.findByUuidId(uuidId)).thenReturn(todo)
+        `when`(todoRepository.findByUuidIdAndDeletedAtIsNull(uuidId)).thenReturn(todo)
 
         // when
         val result = todoService.deleteTodo(uuidId.toString())
@@ -101,7 +100,7 @@ class TodoServiceTest {
     fun `할일 삭제 실패 테스트`() {
         // given
         val uuidId = UUID.randomUUID()
-        `when`(todoRepository.findByUuidId(uuidId)).thenReturn(null)
+        `when`(todoRepository.findByUuidIdAndDeletedAtIsNull(uuidId)).thenReturn(null)
 
         // when && then
         assertThatThrownBy {
@@ -122,7 +121,7 @@ class TodoServiceTest {
             uuidId = uuidId
         )
 
-        `when`(todoRepository.findByUuidId(uuidId)).thenReturn(mockTodo)
+        `when`(todoRepository.findByUuidIdAndDeletedAtIsNull(uuidId)).thenReturn(mockTodo)
         `when`(todoRepository.save(mockTodo)).thenReturn(mockTodo)
 
         // when
@@ -174,7 +173,7 @@ class TodoServiceTest {
             uuidId = uuidId
         )
 
-        `when`(todoRepository.findByUuidId(uuidId)).thenReturn(mockTodo)
+        `when`(todoRepository.findByUuidIdAndDeletedAtIsNull(uuidId)).thenReturn(mockTodo)
         // when && then
         assertThatThrownBy {
             todoService.updateTodo(
@@ -304,7 +303,7 @@ class TodoServiceTest {
             content = "This is a test todo",
             user = mock(User::class.java)
         )
-        `when`(todoRepository.findByUuidId(uuidId)).thenReturn(todo)
+        `when`(todoRepository.findByUuidIdAndDeletedAtIsNull(uuidId)).thenReturn(todo)
 
         // when
         val result = todoService.getTodoDetail(uuidId.toString())
@@ -317,7 +316,7 @@ class TodoServiceTest {
     fun `할일 디테일 가져오기 실패 테스트`() {
         // given
         val uuidId = UUID.randomUUID()
-        `when`(todoRepository.findByUuidId(uuidId)).thenReturn(null)
+        `when`(todoRepository.findByUuidIdAndDeletedAtIsNull(uuidId)).thenReturn(null)
 
         // when && then
         assertThatThrownBy {

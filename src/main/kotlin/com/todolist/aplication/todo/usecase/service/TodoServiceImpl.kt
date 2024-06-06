@@ -24,44 +24,56 @@ class TodoServiceImpl(
 )
     : TodoService {
     override fun createTodo(title: String, content: String?): TodoVoDetail {
+        logger.info { "Todo Entity Create" }
         val todo = Todo(
             title = title,
             content = content,
             user = userRepository.findByIdOrNull(ConverterUtil.jwtIdToUUID()) ?: throw Exception("User Not Found")
         )
+
         todoRepository.save(todo)
+        logger.info { "Todo Entity Save" }
         return todo.toVoDetail()
     }
 
     override fun updateTodo(id: String, content: String, newStatus: Status): TodoVoDetail {
-        val todo = todoRepository.findByUuidId(UUID.fromString(id)) ?: throw Exception("Todo Not Found")
-        todo.content = content
+        logger.info { "Search Update Target Todo Entity" }
+        val todo = todoRepository.findByUuidIdAndDeletedAtIsNull(UUID.fromString(id)) ?: throw Exception("Todo Not Found")
+        logger.info { "Validation Update Todo Entity" }
         when (newStatus){
             Status.PENDING -> {
-                check(todo.status == Status.IN_PROGRESS) { "PENDING은 오직 IN_PROGRESS 상태에서만 변경 가능합니다." }
+                check(todo.status == Status.IN_PROGRESS || todo.status == Status.PENDING) { "PENDING은 오직 IN_PROGRESS 상태에서만 변경 가능합니다." }
                 todo.status = newStatus
             }
             else -> todo.status = newStatus
         }
+        logger.info { "Content Update Todo Entity" }
+        todo.content = content
+
         todoRepository.save(todo)
+        logger.info { "Todo Entity Update" }
         return todo.toVoDetail()
     }
 
     override fun deleteTodo(id: String): Boolean {
-        val todo = todoRepository.findByUuidId(UUID.fromString(id)) ?: throw Exception("Todo Not Found")
+        logger.info { "Search Deleted Target Todo Entity" }
+        val todo = todoRepository.findByUuidIdAndDeletedAtIsNull(UUID.fromString(id)) ?: throw Exception("Todo Not Found")
+        logger.info { "Deleted DateTime Update Delete Todo Entity" }
         todo.deletedAt = LocalDateTime.now()
+
         todoRepository.save(todo)
+        logger.info { "Todo Entity Deleted" }
         return true
     }
 
     override fun getMostRecentTodo(): TodoVo {
-        logger.info { "Get Most Recent Todo Start" }
+        logger.info { "Search Most Recent Todo Start" }
         val todoByUpdatedAt: Todo? = todoRepository.findByUserIdAndDeletedAtIsNullOrderByUpdatedAtDesc(
             ConverterUtil.jwtIdToUUID())
-        logger.info { "Get Most Recent Todo By UpdatedAt" }
+        logger.info { "Search Most Recent Todo By UpdatedAt" }
         val todoByCreatedAt: Todo? = todoRepository.findByUserIdAndDeletedAtIsNullOrderByCreatedAtDesc(
             ConverterUtil.jwtIdToUUID())
-        logger.info { "Get Most Recent Todo By CreatedAt" }
+        logger.info { "Search Most Recent Todo By CreatedAt" }
 
         logger.info { "Todo Based On UpdateAt Compare to Todo Based On CreateAt"}
         return when {
@@ -74,13 +86,17 @@ class TodoServiceImpl(
     }
 
     override fun getAllTodo(): TodoVoList {
+        logger.info { "Search All Of Them User's Todo Entity" }
         val todos = todoRepository.findAllByUserId(
             ConverterUtil.jwtIdToUUID()) ?: throw Exception("Todo Not Found")
+        logger.info { "All Todo Entity Convert VoList" }
         return TodoVoList(todos.map { it.toVo() })
     }
 
     override fun getTodoDetail(id: String): TodoVoDetail {
-        val todo = todoRepository.findByUuidId(UUID.fromString(id)) ?: throw Exception("Todo Not Found")
+        logger.info { "Search User's Todo Entity" }
+        val todo = todoRepository.findByUuidIdAndDeletedAtIsNull(UUID.fromString(id)) ?: throw Exception("Todo Not Found")
+        logger.info { "Todo Entity Convert DetailVo" }
         return todo.toVoDetail()
     }
 }
