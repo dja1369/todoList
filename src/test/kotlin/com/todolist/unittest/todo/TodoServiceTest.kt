@@ -223,7 +223,7 @@ class TodoServiceTest {
         )
 
         `when`(mockConverterUtil.jwtIdToUUID()).thenReturn(userId)
-        `when`(todoRepository.findAllByUserId(mockConverterUtil.jwtIdToUUID())).thenReturn(
+        `when`(todoRepository.findAllByUserIdAndDeletedAtIsNull(mockConverterUtil.jwtIdToUUID())).thenReturn(
             listOf(
                 mockTodo,
                 mockTodo,
@@ -243,7 +243,7 @@ class TodoServiceTest {
     fun `할일 전부 가져오기 실패 테스트`() {
         // given
         `when`(mockConverterUtil.jwtIdToUUID()).thenReturn(userId)
-        `when`(todoRepository.findAllByUserId(mockConverterUtil.jwtIdToUUID())).thenReturn(null)
+        `when`(todoRepository.findAllByUserIdAndDeletedAtIsNull(mockConverterUtil.jwtIdToUUID())).thenReturn(null)
 
         // when && then
         assertThatThrownBy {

@@ -21,7 +21,7 @@ class Todo(
     @Column(name = "title", nullable = false, length = 200)
     val title: String,
 
-    @Column(name = "content", nullable = false)
+    @Column(name = "content", nullable = true)
     var content: String? = null,
 
     @Enumerated(EnumType.STRING)

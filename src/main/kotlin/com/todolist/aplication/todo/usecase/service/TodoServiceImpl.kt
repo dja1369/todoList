@@ -87,7 +87,7 @@ class TodoServiceImpl(
 
     override fun getAllTodo(): TodoVoList {
         logger.info { "Search All Of Them User's Todo Entity" }
-        val todos = todoRepository.findAllByUserId(
+        val todos = todoRepository.findAllByUserIdAndDeletedAtIsNull(
             ConverterUtil.jwtIdToUUID()) ?: throw Exception("Todo Not Found")
         logger.info { "All Todo Entity Convert VoList" }
         return TodoVoList(todos.map { it.toVo() })
