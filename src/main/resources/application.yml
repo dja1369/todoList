@@ -1,30 +1,33 @@
 spring:
   profiles:
-    active: dev
+    active: local
+  config:
+    import: optional:file:../../.env[.properties]
 
 server:
   port: 8080
 
-logging:
-  level:
-    root: info
 ---
 spring:
   config:
     activate:
-      on-profile: dev
+      on-profile: local
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:${db}
+    username: sa
+    password:
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
+    show-sql: true
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MariaDBDialect
-  docker:
-    compose:
-      enabled: true
-      lifecycle-management: start_and_stop
-      skip:
-        in-tests: false
+        dialect: org.hibernate.dialect.H2Dialect
 
+logging:
+    level:
+      root: info
+      org.springframework.web: debug
 
 
