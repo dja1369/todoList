@@ -11,6 +11,4 @@ import java.util.UUID;
 @Repository
 public interface TodoRepository extends JpaRepository<Todo, Long> {
     Optional<List<Todo>> findAllByUserId(UUID user);
-
-
 }

@@ -1,34 +1,37 @@
-import React, {useState} from "react";
+import React from "react";
 import InputComponent from "./InputComponent.jsx";
+import {HOST} from "./config.js";
+import axios from "axios";
 
-const Login = (props) => {
-    const [state, setState] = useState({
-        username: "", password: ""
-    });
-    const handleChange = (e) => {
-        const {name, value} = e.target;
-        setState((prevState) => ({
-            ...prevState,
-            [name]: value
-        }));
+const Login = () => {
+
+    const handleSubmit = () => {
+        axios.post(`${HOST}/api/v1/auth/login`,
+        )
+            .then((response) => {
+                console.log(response);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     }
-    return (<>
-        <form>
+    console.log("rerender")
+    return (
+        <form onSubmit={handleSubmit} className="login">
             <InputComponent
-                placeholder="plz Enter your email"
-                value={state.username}
-                name="email"
+                placeholder="Enter your email"
                 type="text"
-                onChange={handleChange}
+                name="email"
             />
             <InputComponent
-                placeholder="plz Enter your password"
-                value={state.password}
+                placeholder="Enter your password"
                 type="password"
                 name="password"
-                onChange={handleChange}
             />
+            <div className="card">
+                <button onClick={handleSubmit}>Login</button>
+            </div>
         </form>
-    </>)
+    )
 }
 export default Login;

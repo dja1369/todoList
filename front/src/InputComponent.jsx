@@ -1,18 +1,15 @@
 import React from "react";
 
-const InputComponent = ({placeholder, value, type, name, onChange}) => {
+const InputComponent = ({placeholder, type, name}) => {
     return (
-        <>
-            <input
-                placeholder={placeholder}
-                value={value}
-                type={type}
-                name={name}
-                onChange={onChange}
-                required
-            />
-        </>
+        <input
+            placeholder={placeholder}
+            type={type}
+            name={name}
+            required
+        />
     )
 }
+
 
 export default InputComponent;

@@ -1,0 +1,41 @@
+
+.flex {
+    display: flex;
+}
+
+.flex-right {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.header-container {
+    display: flex;
+}
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.container div {
+    height: 50%;
+    border-right: 1px solid #000;
+}
+
+.text-center {
+    text-align: center;
+}
+.a-gap {
+    margin: 5px;
+}
+
+
+.logo-gap {
+    margin: 20px;
+    border: 1px solid #000;
+}
+.form-center {
+    display: flex;
+    justify-content: center;
+}

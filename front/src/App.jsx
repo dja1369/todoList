@@ -6,9 +6,7 @@ function App() {
     return (
         <>
             <h1>TODO LIST Project</h1>
-            <div className="card">
-                <Login />
-            </div>
+            <Login />
         </>
     )
 }
