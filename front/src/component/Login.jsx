@@ -1,6 +1,6 @@
 import React from "react";
 import InputComponent from "./InputComponent.jsx";
-import {HOST} from "./config.js";
+import {HOST} from "../config.js";
 import axios from "axios";
 
 const Login = () => {
