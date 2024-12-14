@@ -1,0 +1,15 @@
+.Header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.Nav {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.Date {
+    margin-bottom: 0;
+    color: #69d3d3;
+}

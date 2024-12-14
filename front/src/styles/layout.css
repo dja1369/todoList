@@ -1,0 +1,10 @@
+.App {
+    max-width: 600px;
+    width: 100%;
+    margin: 0 auto; /* 여백 위아래 0, 좌우 auto*/
+    box-sizing: border-box;
+    box-shadow: 20px 20px 50px rgba(0, 0, 0, 0.9);
+    padding: 20px; /* 내부 여백 */
+    border: 2px solid #DDD;
+    border-radius: 15px;
+}

@@ -1,0 +1,30 @@
+.TodoList {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.TodoList .item-wrapper {
+    width: 80%;
+    align-items: center;
+    margin: 0 auto;
+    padding: 15px;
+}
+
+.TodoList h4 {
+    text-align: center;
+}
+.search-bar{
+    width: 80%;
+    margin: 0 auto 20px;
+    border: none;
+    border-bottom: 1px solid #1f93ff;
+    box-sizing: border-box;
+    padding: 15px;
+}
+
+.search-bar:focus {
+    outline: none;
+    border-bottom: 1px solid #1f93ff;
+}

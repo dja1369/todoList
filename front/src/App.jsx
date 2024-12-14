@@ -1,13 +1,11 @@
-import './App.css'
-import Login from "./component/Login.jsx";
+import "./styles/layout.css"
+import Header from "./components/Header.jsx";
 
 function App() {
-
     return (
-        <>
-            <h1>TODO LIST Project</h1>
-            <Login />
-        </>
+        <div className={"App"}>
+            <Header/>
+        </div>
     )
 }
 
