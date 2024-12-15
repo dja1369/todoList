@@ -5,7 +5,6 @@ import {authAPI} from "./AuthAPI.js";
 
 
 const TodoEditor = ({addTodo}) => {
-    // const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
 
     const onSubmit = () => {
@@ -14,7 +13,6 @@ const TodoEditor = ({addTodo}) => {
         }
         api();
         setContent("");
-        // setTitle("");
     }
 
     const api = () => {
@@ -39,12 +37,6 @@ const TodoEditor = ({addTodo}) => {
                 <Input value={content} onChange={(e) => {
                     setContent(e.target.value)
                 }} placeholder={`Enter Your TODO`}/>
-                {/*<Input value={content} required={false}*/}
-                {/*       onChange={(e) => {*/}
-                {/*           setContent(e.target.value)*/}
-                {/*       }} placeholder={`Enter Your Todo`}/>*/}
-                {/*<input value={content} onChange={onHandleChange}*/}
-                {/*       placeholder={`Enter Your Todo`}/>*/}
                 <button type={"submit"} onClick={onSubmit}>Add</button>
             </div>
         </div>

@@ -2,8 +2,9 @@ import "../styles/todo-list.css";
 import TodoItem from "./TodoItem.jsx";
 
 const TodoList = ({todoList, getTodoApi}) => {
-    const notCompletedTodoList = todoList.filter((item) => item.status !== "DONE");
-    const sortedTodoList = [...notCompletedTodoList].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    const sortedTodoList = todoList
+        .filter(item => item.status !== "DONE")
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
     return (
         <div className={"TodoList"}>
