@@ -1,30 +1,35 @@
 import "../styles/Register.css";
 import Input from "./Input.jsx";
 import React, {useEffect} from "react";
+import {useNavigate} from "react-router-dom";
+import axios from "axios";
+import {HOST} from "../config.js";
 
 const Register = () => {
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
     const [nickName, setNickName] = React.useState("");
 
+    const navigator = useNavigate();
     //
-    // const handleSubmit = () => {
-    //     axios.post(`${HOST}/api/v1/auth/login`,
-    //     )
-    //         .then((response) => {
-    //             console.log(response);
-    //         })
-    //         .catch((error) => {
-    //             console.log(error);
-    //         });
-    // }
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        axios.post(`${HOST}/api/v1/registers/register`,
+            {email: email, password: password, nickName: nickName}
+        )
+            .then((response) => {
+                navigator(`/login`);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
     useEffect(() => {
-        console.log(`email: ${email}, password: ${password}, nickName: ${nickName}`);
     },[email, password, nickName])
     return (
         <div className={"Register"}>
             <h3>Register 🙋</h3>
-            <form className={"RegisterWrapper"}>
+            <form className={"RegisterWrapper"} onSubmit={handleSubmit}>
                 <Input
                     value={nickName}
                     placeholder={"Enter your nickname"}
@@ -44,7 +49,7 @@ const Register = () => {
                     type={"password"}
                 />
                 <div className={"ButtonWrapper"}>
-                    <button>Register</button>
+                    <button type={"submit"}>Register</button>
                 </div>
             </form>
         </div>

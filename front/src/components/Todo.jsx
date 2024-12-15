@@ -1,24 +1,35 @@
 import TodoEditor from "./TodoEditor.jsx";
 import TodoList from "./TodoList.jsx";
 import {useEffect, useState} from "react";
+import {authAPI, isAuthorized} from "./AuthAPI.js";
 
 const Todo = () => {
     const [todoList, setTodoList] = useState([]);
 
-    const handleAddTodo = (content) => {
-        if (!content) {
-            return;
+    const handleAddTodo = () => {
+        if(isAuthorized()){
+            getTodoApi();
         }
-        setTodoList([...todoList, content]);
     }
+
+    const getTodoApi = () => {
+        authAPI.get(`/api/v1/todos`)
+            .then((response) => {
+                    setTodoList(response.data.result);
+                }
+            ).then((error) => {
+            console.log(error);
+        });
+    }
+
     useEffect(() => {
-        console.log(todoList);
-    }, [todoList])
+        handleAddTodo();
+    }, [])
 
     return (
         <>
             <TodoEditor addTodo={handleAddTodo}/>
-            <TodoList todoList={todoList}/>
+            <TodoList todoList={todoList} getTodoApi={getTodoApi}/>
         </>
     )
 }

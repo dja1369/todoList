@@ -1,18 +1,25 @@
 import "../styles/todo-list.css";
 import TodoItem from "./TodoItem.jsx";
 
-const TodoList = ({todoList}) => {
-    console.log(todoList);
+const TodoList = ({todoList, getTodoApi}) => {
+    const notCompletedTodoList = todoList.filter((item) => item.status !== "DONE");
+    const sortedTodoList = [...notCompletedTodoList].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
     return (
         <div className={"TodoList"}>
             <h4>Todo List</h4>
             <input className={"search-bar"} type="text" placeholder="Search todo"/>
             <div className={"item-wrapper"}>
-                {todoList.length === 0 ? (
+                {sortedTodoList.length === 0 ? (
                     <h2>No todos available</h2>
                 ) : (
-                    todoList.map((item) => (
-                        <TodoItem content={item}/>
+                    sortedTodoList.map((item) => (
+                        <TodoItem
+                            id={item.id}
+                            content={item.title}
+                            createdAt={item.createdAt}
+                            getTodoApi={getTodoApi}
+                        />
                     ))
                 )}
             </div>

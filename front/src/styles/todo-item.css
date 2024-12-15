@@ -7,6 +7,18 @@
     border-bottom: 1px solid #e0e0e0;
 }
 
+.TodoItem .modal {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.TodoItem .BtnWrapper {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
 .TodoItem .checkbox-col {
     width: 20px;
 }
@@ -20,11 +32,34 @@
     color: gray;
 }
 
+.TodoItem button {
+    cursor: pointer;
+    width: 80px;
+    border: none;
+    background-color: #1f93ff;
+    color: white;
+    border-radius: 5px;
+}
+
 .TodoItem .btn-col button{
     cursor: pointer;
-    color: gray;
+    color: white;
     font-size: 14px;
     border: none;
     border-radius: 5px;
     padding: 5px;
+}
+
+.TodoItem .search-bar{
+    width: 80%;
+    margin: 0 auto 20px;
+    border: none;
+    border-bottom: 1px solid #1f93ff;
+    box-sizing: border-box;
+    padding: 15px;
+}
+
+.TodoItem .search-bar:focus {
+    outline: none;
+    border-bottom: 1px solid #1f93ff;
 }

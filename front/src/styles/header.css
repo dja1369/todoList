@@ -1,6 +1,6 @@
 .Header {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
 }
 
 .Nav {
@@ -10,6 +10,12 @@
 }
 
 .Date {
-    margin-bottom: 0;
+    font-size: 1.5rem;
     color: #69d3d3;
+}
+
+.Header .nav-tap {
+    border: 1px solid #ffffff;
+    border-radius: 5px;
+    padding: 3px;
 }
